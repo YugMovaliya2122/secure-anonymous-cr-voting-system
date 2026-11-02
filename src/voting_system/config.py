@@ -1,8 +1,6 @@
 """Filesystem layout for the localhost prototype."""
-
 from dataclasses import dataclass
 from pathlib import Path
-
 
 @dataclass(frozen=True)
 class Settings:
@@ -19,6 +17,14 @@ class Settings:
     @property
     def audit_root(self) -> Path:
         return self.data_root / "audit"
+
+    @property
+    def users_file(self) -> Path:
+        return self.identity_root / "users.json"
+
+    @property
+    def session_secret_file(self) -> Path:
+        return self.data_root / ".session-secret"
 
     def create_storage_roots(self) -> None:
         for root in (self.identity_root, self.ballot_root, self.audit_root):
