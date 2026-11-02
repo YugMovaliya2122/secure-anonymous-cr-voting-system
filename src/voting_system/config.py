@@ -19,6 +19,10 @@ class Settings:
         return self.data_root / "audit"
 
     @property
+    def roster_root(self) -> Path:
+        return self.identity_root / "rosters"
+
+    @property
     def users_file(self) -> Path:
         return self.identity_root / "users.json"
 
@@ -27,5 +31,5 @@ class Settings:
         return self.data_root / ".session-secret"
 
     def create_storage_roots(self) -> None:
-        for root in (self.identity_root, self.ballot_root, self.audit_root):
+        for root in (self.identity_root, self.ballot_root, self.audit_root, self.roster_root):
             root.mkdir(parents=True, exist_ok=True)
