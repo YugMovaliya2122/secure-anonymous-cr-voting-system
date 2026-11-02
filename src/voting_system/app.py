@@ -5,7 +5,7 @@ import secrets
 from pathlib import Path
 from flask import Flask, jsonify
 from .auth import bootstrap_admin, register_auth_routes
-from .config import Settings
+from .config import Settings\nfrom .roster import register_roster_routes
 
 def _load_or_create_session_secret(path: Path) -> str:
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -30,7 +30,7 @@ def create_app(test_config: dict[str, object] | None = None) -> Flask:
         BOOTSTRAP_ADMIN_PASSWORD=os.environ.get("BOOTSTRAP_ADMIN_PASSWORD", ""),
         SESSION_COOKIE_HTTPONLY=True,
         SESSION_COOKIE_SAMESITE="Lax",
-        SESSION_COOKIE_SECURE=False,  # localhost development; enable HTTPS before deployment
+        MAX_CONTENT_LENGTH=1_100_000,\n        SESSION_COOKIE_SECURE=False,  # localhost development; enable HTTPS before deployment
     )
     if test_config:
         app.config.update(test_config)
@@ -44,11 +44,11 @@ def create_app(test_config: dict[str, object] | None = None) -> Flask:
             str(app.config.get("BOOTSTRAP_ADMIN_EMAIL") or ""),
             str(app.config.get("BOOTSTRAP_ADMIN_PASSWORD") or ""),
         )
-    register_auth_routes(app)
+    register_auth_routes(app)\n    register_roster_routes(app)
 
     @app.get("/health")
     def health():
-        return jsonify(status="ok", phase="authentication", crypto_status="pending_protocol_approval"), 200
+        return jsonify(status="ok", phase="roster_management", crypto_status="pending_protocol_approval"), 200
 
     @app.get("/")
     def index():
